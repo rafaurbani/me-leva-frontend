@@ -50,7 +50,7 @@ export interface PathRequest {
     destinationBuildingName: string;
 }
 
-const API_BASE_URL = "http://localhost:3000/api";
+const API_BASE_URL = "https://me-leva-backend-zhpl.onrender.com/api/";
 
 /**
  * Busca a lista de prédios da API.
