@@ -11,6 +11,7 @@ export interface Building {
     number: number;
     campus: string;
     wings: Wing[];
+    displayName: string;
 }
 
 export interface Company {
