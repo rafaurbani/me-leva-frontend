@@ -60,11 +60,51 @@ const API_BASE_URL = (import.meta.env.VITE_API_BASE as string) || "/api";
 console.warn("Using API_BASE_URL =", API_BASE_URL);
 
 /**
+ * Resolve the final fetch URL for a given API path.
+ * - If `API_BASE_URL` is a relative path (starts with `/`) we use it directly.
+ * - If it's an absolute URL and we're running on localhost, keep the absolute URL
+ *   (so local development continues to call a local backend).
+ * - If it's an absolute URL but a different origin from the page, convert it to
+ *   a relative path using the absolute URL's pathname so the browser will call
+ *   the same origin (and Vercel's rewrite/proxy will forward to the backend).
+ */
+const resolveApiUrl = (path: string): string => {
+    // ensure path starts with '/'
+    const ensurePath = (p: string) => (p.startsWith('/') ? p : `/${p}`);
+
+    if (API_BASE_URL.startsWith('/')) {
+        return `${API_BASE_URL.replace(/\/$/, '')}${ensurePath(path)}`;
+    }
+
+    try {
+        const parsed = new URL(API_BASE_URL);
+        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+        if (isLocalhost) {
+            // keep absolute URL for local development
+            return `${API_BASE_URL.replace(/\/$/, '')}${ensurePath(path)}`;
+        }
+
+        if (parsed.origin === window.location.origin) {
+            // same origin absolute URL — safe to use as-is
+            return `${API_BASE_URL.replace(/\/$/, '')}${ensurePath(path)}`;
+        }
+
+        // different origin — convert to a relative path using the absolute URL's pathname
+        const basePath = parsed.pathname.replace(/\/$/, '');
+        return `${basePath}${ensurePath(path)}`;
+    } catch (err) {
+        // fallback — use API_BASE_URL directly
+        return `${API_BASE_URL.replace(/\/$/, '')}${ensurePath(path)}`;
+    }
+};
+
+/**
  * Busca a lista de prédios da API.
  */
 export const fetchBuildings = async (): Promise<Building[]> => {
     try {
-        const res = await fetch(`${API_BASE_URL}/buildings`);
+        const res = await fetch(resolveApiUrl('/buildings'));
         if (!res.ok) {
             throw new Error(`HTTP error! status: ${res.status}`);
         }
@@ -80,7 +120,7 @@ export const fetchBuildings = async (): Promise<Building[]> => {
  */
 export const fetchCompanies = async (): Promise<Company[]> => {
     try {
-        const res = await fetch(`${API_BASE_URL}/companies`);
+        const res = await fetch(resolveApiUrl('/companies'));
         if (!res.ok) {
             throw new Error(`HTTP error! status: ${res.status}`);
         }
@@ -97,7 +137,7 @@ export const fetchCompanies = async (): Promise<Company[]> => {
  */
 export const fetchRooms = async (): Promise<Room[]> => {
     try {
-        const res = await fetch(`${API_BASE_URL}/rooms`);
+        const res = await fetch(resolveApiUrl('/rooms'));
         if (!res.ok) {
             throw new Error(`HTTP error! status: ${res.status}`);
         }
@@ -114,7 +154,7 @@ export const fetchRooms = async (): Promise<Room[]> => {
  */
 export const calculatePath = async (payload: PathRequest): Promise<any> => {
     try {
-        const res = await fetch(`${API_BASE_URL}/paths/calculate`, {
+        const res = await fetch(resolveApiUrl('/paths/calculate'), {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload),
