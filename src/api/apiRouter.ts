@@ -50,7 +50,14 @@ export interface PathRequest {
     destinationBuildingName: string;
 }
 
-const API_BASE_URL = (import.meta.env.VITE_API_BASE as string) || "https://me-leva-backend-zhpl.onrender.com/api";
+// Use Vercel proxy by default (relative `/api`) so browser requests come from
+// the same origin and avoid CORS issues. Override with `VITE_API_BASE` in
+// environment if you need to point elsewhere (e.g. local backend during dev).
+const API_BASE_URL = (import.meta.env.VITE_API_BASE as string) || "/api";
+
+// Temporary runtime debug to confirm which base URL the built client uses.
+// Remove this after confirming production behavior.
+console.warn("Using API_BASE_URL =", API_BASE_URL);
 
 /**
  * Busca a lista de prédios da API.
