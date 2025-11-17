@@ -50,7 +50,7 @@ export interface PathRequest {
     destinationBuildingName: string;
 }
 
-const API_BASE_URL = "https://me-leva-backend-zhpl.onrender.com/api/";
+const API_BASE_URL = (import.meta.env.VITE_API_BASE as string) || "https://me-leva-backend-zhpl.onrender.com/api";
 
 /**
  * Busca a lista de prédios da API.
