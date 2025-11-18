@@ -49,8 +49,8 @@ const TECNOPUC_BOUNDS: L.LatLngBounds = new L.LatLngBounds(
 
 // Posição padrão (entrada do Tecnopuc) se o usuário estiver fora dos limites
 const DEFAULT_START_POSITION: UserPosition = { 
-    lat: -30.059762130905092, 
-    lng: -51.171838045120246 
+    lat: -30.059492841057256,
+    lng: -51.171854138374336
 };
 
 interface Props {
