@@ -135,26 +135,17 @@ const BottomSheet: React.FC<Props> = ({ onHeightChange, onRouteCalculated, userP
         }
     }, [selectedProduct, selectedArea, selected]);
     
-    // *** INÍCIO DA LÓGICA CORRIGIDA ***
-    /**
-     * Retorna a posição de partida para o cálculo da rota.
-     * De acordo com a regra de negócio, a rota deve SEMPRE
-     * começar da entrada padrão do Tecnopuc.
-     */
     const getStartPosition = (): UserPosition => {
         // A lógica de verificação agora é usada apenas para fins de log,
         // mas o retorno é sempre a posição padrão.
         if (userPosition && TECNOPUC_BOUNDS.contains([userPosition.lat, userPosition.lng])) {
             console.log("Usuário dentro dos limites. Usando posição padrão (entrada) para rota, conforme solicitado.");
+            return userPosition;
         } else {
              console.warn("Usuário fora dos limites ou localização nula. Usando posição padrão (entrada) para rota.");
-        }
-        
-        // Retorna sempre a posição fixa
         return DEFAULT_START_POSITION;
+        }
     };
-    // *** FIM DA LÓGICA CORRIGIDA ***
-
     
     const handleCalculatePathForCompany = async (company: Company) => {
         if (!company.building?.displayName) { alert("A localização do prédio para esta empresa não foi encontrada."); return; }
