@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup, Polyline, Polygon, useMapEvents, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Polyline, /*Polygon,*/ useMapEvents, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import RecenterButton from "../components/RecenterButton";
@@ -51,7 +51,7 @@ const Leaflet: React.FC<LeafletProps> = ({ bottomSheetHeight, route, userPositio
         [-30.057, -51.169]  // Nordeste
     );
 
-    const color = { color: "purple" };
+    // const color = { color: "purple" };
 
     function ClickPopup() {
         const [position, setPosition] = useState<L.LatLng | null>(null);
@@ -87,6 +87,9 @@ const Leaflet: React.FC<LeafletProps> = ({ bottomSheetHeight, route, userPositio
                     <Popup>Sua localização</Popup>
                 </Marker>
             )}
+            
+            {/*<Polygon pathOptions={color} positions={predio96a}><Popup>Prédio 96A</Popup></Polygon>
+            <Polygon pathOptions={color} positions={predio94}><Popup>Prédio 94</Popup></Polygon> */}
             
             {routeCoordinates.length > 0 && (
                 <Polyline pathOptions={{ color: "blue", weight: 5 }} positions={routeCoordinates} />
