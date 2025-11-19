@@ -50,7 +50,7 @@ export interface PathRequest {
     destinationBuildingName: string;
 }
 
-const API_BASE_URL = (import.meta.env.VITE_API_BASE as string) || "/api";
+const API_BASE_URL = (import.meta.env.VITE_API_URL as string) || '/api';
 
 /**
  * Busca a lista de prédios da API.

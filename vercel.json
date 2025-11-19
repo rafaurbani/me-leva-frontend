@@ -2,7 +2,10 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://me-leva-backend-zhpl.onrender.com/api/:path*"
-    }
-  ]
+      "destination": "https://me-leva-backend-li11.onrender.com/api/:path*"
+   }
+  ],
+  "env": {
+    "VITE_API_URL": "/api"
+  }
 }
