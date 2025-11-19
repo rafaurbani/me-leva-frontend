@@ -51,25 +51,6 @@ const Leaflet: React.FC<LeafletProps> = ({ bottomSheetHeight, route, userPositio
         [-30.057, -51.169]  // Nordeste
     );
 
-    const predio94: L.LatLngExpression[] = [
-        [-30.0601405283328, -51.17043256759644],
-        [-30.060662853694282, -51.170483529567726],
-        [-30.060681425211953, -51.170268952846534],
-        [-30.06069071096948, -51.170220673084266],
-        [-30.060142849784953, -51.17019653320313],
-    ];
-
-    const predio96a: L.LatLngExpression[] = [
-        [-30.060054634565056, -51.17166638374329],
-        [-30.060033741475145, -51.17188632488251],
-        [-30.06021249332408, -51.17189437150956],
-        [-30.060217136224946, -51.17197483778],
-        [-30.060423745093058, -51.17199093103409],
-        [-30.060430709429408, -51.17192387580872],
-        [-30.060516602870848, -51.17193996906281],
-        [-30.060535174415975, -51.171709299087524],
-    ];
-
     const color = { color: "purple" };
 
     function ClickPopup() {
@@ -107,8 +88,6 @@ const Leaflet: React.FC<LeafletProps> = ({ bottomSheetHeight, route, userPositio
                 </Marker>
             )}
             
-            <Polygon pathOptions={color} positions={predio96a}><Popup>Prédio 96A</Popup></Polygon>
-            <Polygon pathOptions={color} positions={predio94}><Popup>Prédio 94</Popup></Polygon>
             {routeCoordinates.length > 0 && (
                 <Polyline pathOptions={{ color: "blue", weight: 5 }} positions={routeCoordinates} />
             )}
