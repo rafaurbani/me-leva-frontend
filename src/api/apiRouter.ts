@@ -24,8 +24,6 @@ export interface Company {
     } | null;
 }
 
-// --- ATUALIZAÇÃO AQUI ---
-// Simplificamos a interface do Produto para o novo fluxo
 export interface Product {
     id: string;
     name: string;
@@ -40,6 +38,7 @@ export interface Area {
 export interface Room {
     id: string;
     identifier: string;
+    floor?: string | null;
     building: {
         displayName: string;
     };
@@ -50,7 +49,8 @@ export interface PathRequest {
     destinationBuildingName: string;
 }
 
-const API_BASE_URL = (import.meta.env.VITE_API_URL as string) || '/api';
+// CORREÇÃO: Usando a URL completa do backend novamente
+const API_BASE_URL = 'http://localhost:3000/api';
 
 /**
  * Busca a lista de prédios da API.

@@ -5,8 +5,8 @@ import SelectableButton from "./SelectableButton.tsx";
 import { fetchBuildings, fetchCompanies, calculatePath, fetchRooms } from "../api/apiRouter.ts";
 import type { Product, Company, Room, Area } from "../api/apiRouter.ts";
 import type { Building, PathRequest } from "../api/apiRouter";
-import type { RouteData, UserPosition } from "../App"; // Importa UserPosition
-import L from "leaflet"; // Importa L para usar LatLngBounds
+import type { RouteData, UserPosition } from "../App"; 
+import L from "leaflet"; 
 
 // Funções de busca de dados
 const fetchAreas = async (): Promise<Area[]> => {
@@ -41,13 +41,11 @@ const normalizeText = (text: string) => {
 
 const SNAP_POINTS_PERCENT = [0.1, 0.4, 0.85];
 
-// Limites da área mapeada (copiado de Leaflet.tsx)
 const TECNOPUC_BOUNDS: L.LatLngBounds = new L.LatLngBounds(
-    [-30.063, -51.175], // Sudoeste
-    [-30.057, -51.169]  // Nordeste
+    [-30.063, -51.175], 
+    [-30.057, -51.169]  
 );
 
-// Posição padrão (entrada do Tecnopuc) se o usuário estiver fora dos limites
 const DEFAULT_START_POSITION: UserPosition = { 
     lat: -30.059492841057256,
     lng: -51.171854138374336
@@ -56,11 +54,10 @@ const DEFAULT_START_POSITION: UserPosition = {
 interface Props {
     onHeightChange?: (height: number) => void;
     onRouteCalculated: (route: RouteData | null) => void;
-    userPosition: UserPosition | null; // Recebe a posição do usuário
+    userPosition: UserPosition | null;
 }
 
 const BottomSheet: React.FC<Props> = ({ onHeightChange, onRouteCalculated, userPosition }) => {
-    // ... (Hooks de estado: height, viewportHeight, isDragging, selected, data, etc.) ...
     const [height, setHeight] = useState(0);
     const [viewportHeight, setViewportHeight] = useState(0);
     const [isDragging, setIsDragging] = useState(false);
@@ -78,8 +75,6 @@ const BottomSheet: React.FC<Props> = ({ onHeightChange, onRouteCalculated, userP
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const scrollPositionRef = useRef(0);
     
-    // ... (useEffect de resize, onHeightChange, overflow, fetchData, etc. - sem alterações) ...
-        
     useEffect(() => {
         const handleResize = () => setViewportHeight(window.innerHeight);
         handleResize();
@@ -136,8 +131,6 @@ const BottomSheet: React.FC<Props> = ({ onHeightChange, onRouteCalculated, userP
     }, [selectedProduct, selectedArea, selected]);
     
     const getStartPosition = (): UserPosition => {
-        // A lógica de verificação agora é usada apenas para fins de log,
-        // mas o retorno é sempre a posição padrão.
         if (userPosition && TECNOPUC_BOUNDS.contains([userPosition.lat, userPosition.lng])) {
             console.log("Usuário dentro dos limites. Usando posição padrão (entrada) para rota, conforme solicitado.");
             return userPosition;
@@ -170,8 +163,6 @@ const BottomSheet: React.FC<Props> = ({ onHeightChange, onRouteCalculated, userP
         try { const data = await calculatePath(payload); onRouteCalculated(data); setHeight(SNAP_POINTS_PERCENT[0] * viewportHeight); } catch (error) { console.error("Path calculation for room failed:", error); onRouteCalculated(null); alert("Ocorreu um erro ao calcular a rota para a sala."); }
     };
 
-    // ... (Restante do componente: handleSelectCategory, handleItemSelect, handleBackClick, handleDrag, filtros, JSX) ...
-    
     const handleSelectCategory = (label: string) => {
         setSelected(label);
         setSelectedProduct(null);
@@ -247,7 +238,24 @@ const BottomSheet: React.FC<Props> = ({ onHeightChange, onRouteCalculated, userP
                         </div>
                     )}
 
-                    {!loading && selected === "Sala" && (<div className="list-container">{filteredRooms.map((r) => (<div key={r.id} className="card-item" onClick={() => handleCalculatePathForRoom(r)}><div className="card-header"><span className="icon">🚪</span><div className="card-info"><h3>Sala {r.identifier}</h3><p className="muted">Localizada no: {r.building.displayName}</p></div></div></div>))}</div>)}
+                    {!loading && selected === "Sala" && (
+                        <div className="list-container">
+                            {filteredRooms.map((r) => (
+                                <div key={r.id} className="card-item" onClick={() => handleCalculatePathForRoom(r)}>
+                                    <div className="card-header">
+                                        <span className="icon">🚪</span>
+                                        <div className="card-info">
+                                            <h3>Sala {r.identifier}</h3>
+                                            <p className="muted">
+                                                Localizada no: {r.building.displayName}
+                                                {r.floor && ` • ${r.floor}`}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                     
                     {!loading && selected === "Produto" && (
                         <>
