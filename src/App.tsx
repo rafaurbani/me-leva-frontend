@@ -26,24 +26,31 @@ const App: React.FC = () => {
     // Hook para obter a localização do usuário
     useEffect(() => {
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    setUserPosition({
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude,
-                    });
-                    console.log("Localização do usuário obtida:", position.coords);
-                },
-                (err) => {
-                    console.warn("Erro ao obter localização. Usando padrão.", err);
-                    setUserPosition(null); // Falha ao obter, lógica de fallback será usada
-                }
-            );
+            const success = (position: GeolocationPosition) => {
+                setUserPosition({
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                });
+            };
+
+            const error = (err: GeolocationPositionError) => {
+                console.warn("Erro ao obter localização:", err);
+            };
+
+            const options = {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            };
+
+            const watchId = navigator.geolocation.watchPosition(success, error, options);
+
+            return () => navigator.geolocation.clearWatch(watchId);
         } else {
-            console.warn("Geolocalização não é suportada por este navegador. Usando padrão.");
-            setUserPosition(null); // Navegador não suporta, lógica de fallback será usada
+            console.warn("Geolocalização não é suportada por este navegador.");
+            setUserPosition(null);
         }
-    }, []); // Executa apenas uma vez
+    }, []);
 
     return (
         <div className="app-container">

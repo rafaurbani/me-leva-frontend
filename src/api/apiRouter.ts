@@ -51,6 +51,7 @@ export interface PathRequest {
 
 // CORREÇÃO: Usando a URL completa do backend novamente
 const API_BASE_URL = (import.meta.env.VITE_API_URL as string) || '/api';
+//const API_BASE_URL = 'http://localhost:3000/api';
 
 /**
  * Busca a lista de prédios da API.
